@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>BlankSharedApp6.Windows</title>
+
+    <!-- WinJS references -->
+    <link href="//Microsoft.WinJS.2.0/css/ui-dark.css" rel="stylesheet" />
+    <script src="//Microsoft.WinJS.2.0/js/base.js"></script>
+    <script src="//Microsoft.WinJS.2.0/js/ui.js"></script>
+
+    <!-- BlankSharedApp6.Windows references -->
+    <link href="/css/default.css" rel="stylesheet" />
+    <script src="/js/default.js"></script>
+</head>
+<body>
+
+    
+    <h1>Visual Resistor Color-Code Calculator</h1>
+
+    <script language="JavaScript1.1">
+
+
+        var multiplier = new Array()
+        multiplier[0] = 0
+        multiplier[1] = 1
+        multiplier[2] = 2
+        multiplier[3] = 3
+        multiplier[4] = 4
+        multiplier[5] = 5
+        multiplier[6] = 6
+        multiplier[7] = 7
+        multiplier[8] = 8
+        multiplier[9] = 9
+        multiplier[10] = -1
+        multiplier[11] = -2
+
+        // create array listing all tolerance values
+        var tolerance = new Array()
+        tolerance[0] = "+/-5%"
+        tolerance[1] = "+/-10%"
+        tolerance[2] = "+/-20%"
+
+        // format large values into kilo and meg
+        function format(ohmage) {
+            if (ohmage >= 1e6) {
+                ohmage /= 1e6
+                return "" + ohmage + " Mohms"
+            } else {
+                if (ohmage >= 1e3) {
+                    ohmage /= 1e3
+                    return "" + ohmage + " Kohms"
+                } else {
+                    return "" + ohmage + " ohms"
+                }
+            }
+        }
+
+        // calculate resistance and tolerance values
+        function calcOhms() {
+            var form = document.forms["input"]
+            var d1 = form.tensSelect.selectedIndex
+            var d2 = form.onesSelect.selectedIndex
+            var m = form.multiplierSelect.selectedIndex
+            var t = form.toleranceSelect.selectedIndex
+            var ohmage = (d1 * 10) + d2
+            ohmage = eval("" + ohmage + "e" + multiplier[m])
+            ohmage = format(ohmage)
+            var tol = tolerance[t]
+            document.forms["output"].result.value = ohmage + ", " + tol
+        }
+
+        // pre-load all color images into image cache
+        var colorArray = new Array("Black", "Blue", "Brown", "Gold", "Gray", "Green", "None", "Orange", "Red", "Silver", "Violet", "White", "Yellow")
+        var imageDB = new Array()
+        for (i = 0; i < colorArray.length; i++) {
+            imageDB[colorArray[i]] = new Image(21, 182)
+            imageDB[colorArray[i]].src = "http://www.pcboard.ca/image/reference/resistor_calculator/" + colorArray[i] + ".gif"
+        }
+
+        function setTens(choice) {
+            var tensColor = choice.options[choice.selectedIndex].text
+            document.tens.src = imageDB[tensColor].src
+            calcOhms()
+        }
+        function setOnes(choice) {
+            var onesColor = choice.options[choice.selectedIndex].text
+            document.ones.src = imageDB[onesColor].src
+            calcOhms()
+        }
+        function setMult(choice) {
+            var multColor = choice.options[choice.selectedIndex].text
+            document.mult.src = imageDB[multColor].src
+            calcOhms()
+        }
+        function setTol(choice) {
+            var tolColor = choice.options[choice.selectedIndex].text
+            document.tol.src = imageDB[tolColor].src
+            calcOhms()
+        }
+        </script>
+        // end script hiding -->
+    
+
+    <table align="center" border="0" cellpadding="3" cellspacing="0" width="500">
+        <tbody>
+            <tr>
+                <td colspan="2">
+                    <div onload="calcOhms()">
+                        
+                            Select the color bands on your resistor
+                            <form name="input"><select name="tensSelect" onchange="setTens(this)"><option selected="selected">Black</option><option>Brown</option><option>Red</option><option>Orange</option><option>Yellow</option><option>Green</option><option>Blue</option><option>Violet</option><option>Gray</option><option>White</option></select> <select name="onesSelect" onchange="setOnes(this)"><option selected="selected">Black</option><option>Brown</option><option>Red</option><option>Orange</option><option>Yellow</option><option>Green</option><option>Blue</option><option>Violet</option><option>Gray</option><option>White</option></select> <select name="multiplierSelect" onchange="setMult(this)"><option selected="selected">Black</option><option>Brown</option><option>Red</option><option>Orange</option><option>Yellow</option><option>Green</option><option>Blue</option><option>Violet</option><option>Gray</option><option>White</option><option>Gold</option><option>Silver</option></select>     <select name="toleranceSelect" onchange="setTol(this)"><option selected="selected">Gold</option><option>Silver</option><option>None</option></select></form>
+
+                            <hr /><br />
+                        <script language="JavaScript1.1">
+
+    var form = document.forms["input"]
+    var tensDigit = form.tensSelect.selectedIndex
+    var tensColor = form.tensSelect.options[tensDigit].text
+    var onesDigit = form.onesSelect.selectedIndex
+    var onesColor = form.onesSelect.options[onesDigit].text
+    var multDigit = form.multiplierSelect.selectedIndex
+    var multColor = form.multiplierSelect.options[multDigit].text
+    var tolDigit = form.toleranceSelect.selectedIndex
+    var tolColor = form.toleranceSelect.options[tolDigit].text
+
+    var table = "<TABLE BORDER=0><FORM NAME='output'>"
+    table += "<TR><TH ALIGN=middle>Resistance Value:</TH>"
+    table += " <TH ALIGN='middle'><INPUT TYPE='text' NAME='result' SIZE=20 onFocus='this.blur()'>"
+    table += "</TH></TR><TR><TD COLSPAN=2>&nbsp;"
+    table += "<IMG SRC='http://www.pcboard.ca/image/reference/resistor_calculator/resleft.gif' WIDTH=127 HEIGHT=182><IMG" +
+                " SRC='http://www.pcboard.ca/image/reference/resistor_calculator/" + tensColor + ".gif' NAME='tens' WIDTH=21 HEIGHT=182><IMG" +
+                " SRC='http://www.pcboard.ca/image/reference/resistor_calculator/" + onesColor + ".gif' NAME='ones' WIDTH=21 HEIGHT=182><IMG" +
+                " SRC='http://www.pcboard.ca/image/reference/resistor_calculator/" + multColor + ".gif' NAME='mult' WIDTH=21 HEIGHT=182><IMG" +
+                " SRC='http://www.pcboard.ca/image/reference/resistor_calculator/spacer.gif' WIDTH=17 HEIGHT=182><IMG" +
+                " SRC='http://www.pcboard.ca/image/reference/resistor_calculator/" + tolColor + ".gif' NAME='tol' WIDTH=21 HEIGHT=182><IMG" +
+                " SRC='http://www.pcboard.ca/image/reference/resistor_calculator/resright.gif' WIDTH=127 HEIGHT=182>"
+    table += "&nbsp;</TD></TR></FORM></TABLE>"
+    MSApp.execUnsafeLocalFunction(function() {
+
+
+        document.write(table)
+    }
+
+
+                        )</script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>
